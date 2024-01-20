@@ -6,6 +6,6 @@ export class AppController {
     @Get()
     @Render('index')
     root() {
-        return { message: "Hello", person: "jido" };
+        return { message: "Hello", person: ["jido", "ann", "bob"] };
     }
 }
