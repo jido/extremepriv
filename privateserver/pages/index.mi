@@ -7,9 +7,7 @@
     <script type="text/javascript" src="/main.js"></script>
   </head>
   <body onload="fillPersonalInfo()">
-    <div>
-       {{message}}{{#person tag="div"}}, {{.}}{{/person}}!
-    </div>
+     {{>greeting message=message person=person}}
     <hr/>
     You are <span class="first-name">TBD</span>.
   </body>
