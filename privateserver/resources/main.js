@@ -88,16 +88,16 @@ function createAccount(pii) {
     const storeSecretKey = function(id, key) {
         return openDB.then(db =>
             new Promise(resolve => {
-                const addRequest = db
-                    .transaction(keyStore, "readwrite")
+                const transact = db.transaction(keyStore, "readwrite");
+                transact.oncomplete = resolve;
+
+                const addRequest = transact
                     .objectStore(keyStore)
                     .add({ id: id, key: key });
 
                 addRequest.onerror = () => {
                     throw new Error("Saving the new key failed: " + addRequest.error);
                 }
-
-                addRequest.onsuccess = (event) => resolve(event.target.result)
         }));
     }
 
@@ -164,7 +164,7 @@ function loadPageUpdate(name, target) {
     }).then(template =>
         getHtml(template)
     ).then(html => {
-        target.innerHTML = html;
+        target.outerHTML = html;
     });
 }
 
