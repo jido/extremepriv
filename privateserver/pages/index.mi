@@ -5,10 +5,13 @@
     <title>Hello World</title>
     <link rel="stylesheet" href="/main.css">
     <script type="text/javascript" src="/main.js"></script>
+    <script type="text/javascript" src="/mistigri.js"></script>
   </head>
-  <body onload="fillPersonalInfo()">
-     {{>greeting message=message person=person}}
+  <body>
+    {{>greeting message=message person=person}}
     <hr/>
-    You are <span class="first-name">TBD</span>.
+    <div onclick="loadPageUpdate('identity', this)">
+      Click here to continue
+    </div>
   </body>
 </html>

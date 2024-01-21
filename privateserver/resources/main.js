@@ -10,95 +10,162 @@ const generateKey = window.crypto.subtle.generateKey(
     ["encrypt", "decrypt"]
 );
 
-function fillPersonalInfo() {
+function encryptMessage(message, key) {
+    const encoder = new TextEncoder();
+    const encodedMsg = encoder.encode(message);
+    const iv = window.crypto.getRandomValues(new Uint8Array(12));
+    const result = window.crypto.subtle.encrypt(
+        { name: keyAlgorithm.name, iv: iv },
+        key,
+        encodedMsg
+    );
+    return result.then(encrypted => ({
+        iv: iv,
+        ciphertext: encrypted
+    }));
+}
 
-    const getSecretKey =
-        new Promise(resolve => {
-            const saveNewKey = function(db) {
-                //console.log("Generating and saving a key...");
-                generateKey.then(key => {
-                    const addRequest = db
-                        .transaction("keys", "readwrite")
-                        .objectStore("keys")
-                        .add({ algorithm: keyAlgorithm, key: key });
-                
-                    addRequest.onerror = () =>
-                        console.log("Saving the new key failed: " + addRequest.error);
-                
-                    resolve(key);
-                });
-            }
-        
-            const openRequest = window.indexedDB.open("SiteSecrets", 1);
-        
-            openRequest.onerror = () => resolve(generateKey);  // if database unavailable then make new key
-        
-            openRequest.onsuccess = (event) => {
-                // Get existing key
-                console.log("Found previous key store!");
-                const db = event.target.result;
-                const getRequest = db
-                    .transaction("keys")
-                    .objectStore("keys")
-                    .get(keyAlgorithm.name);
-                getRequest.onsuccess = (event) => resolve(event.target.result.key);
-                getRequest.onerror = () => saveNewKey(db);  // key not found, create one
-            }
-        
-            openRequest.onupgradeneeded = (event) => {
-                // Create database
-                console.log("Creating a key store...");
-                db = event.target.result;
-                db
-                    .createObjectStore("keys", { keyPath: "algorithm.name" })
-                    .transaction
-                    .oncomplete = () => saveNewKey(db);
-            };
-        });
+function decryptMessage(input, key) {
+    const decoder = new TextDecoder();
+    const result = window.crypto.subtle.decrypt(
+        { name: keyAlgorithm.name, iv: input.iv },
+        key,
+        input.ciphertext
+    );
+    return result.then(decrypted =>
+        decoder.decode(decrypted)
+    );
+}
 
-    const encryptMessage = function(message, key) {
-        const enc = new TextEncoder();
-        const encoded = enc.encode(message);
-        // iv will be needed for decryption
-        const iv = window.crypto.getRandomValues(new Uint8Array(12));
-        const result = window.crypto.subtle.encrypt(
-                { name: "AES-GCM", iv: iv },
-                key,
-                encoded,
-            );
-        return result.then(encrypted => ({
-            iv: iv,
-            ciphertext: encrypted
+var secure_pii = null;
+
+function savePII(pii, key) {
+    const message = JSON.stringify(pii);
+    return encryptMessage(message, key).then(encrypted => {
+        secure_pii = encrypted;
+        return encrypted;
+    });
+}
+
+var user_id = null;
+
+const dbName = "SiteSecrets";
+const dbVer = 2;
+const keyStore = "keys";
+
+function createAccount(pii) {
+    const sendAddRequest = function(secure_pii) {
+        // TODO: send data to server
+        return Math.floor(Math.random() * 1000000) + 1;
+    }
+    
+    const openDB = new Promise(resolve => {
+        const openRequest = window.indexedDB.open(dbName, dbVer);
+
+        openRequest.onerror = () => {
+            throw new Error("Opening the local database failed: " + openRequest.error);
+        }
+
+        openRequest.onsuccess = (event) => {
+            resolve(event.target.result);
+        }
+
+        openRequest.onupgradeneeded = (event) => {
+            // Create database
+            console.log("Creating a key store...");
+            const db = event.target.result;
+            if ((event.oldVersion < dbVer) && db.objectStoreNames.contains(keyStore)) {
+                console.log("Found an old key store, deleting it.");
+                db.deleteObjectStore(keyStore);
+            }
+            db
+                .createObjectStore(keyStore, { keyPath: "id" })
+                .transaction
+                .oncomplete = () => resolve(db);
+        }
+    });
+
+    const storeSecretKey = function(id, key) {
+        return openDB.then(db =>
+            new Promise(resolve => {
+                const addRequest = db
+                    .transaction(keyStore, "readwrite")
+                    .objectStore(keyStore)
+                    .add({ id: id, key: key });
+
+                addRequest.onerror = () => {
+                    throw new Error("Saving the new key failed: " + addRequest.error);
+                }
+
+                addRequest.onsuccess = (event) => resolve(event.target.result)
         }));
     }
 
-    const savePII = function(pii, key) {
-        return key.then(key =>
-            encryptMessage(JSON.stringify(pii), key)
+    return generateKey.then(key =>
+        savePII(pii, key).then(secure_pii =>
+            sendAddRequest(secure_pii)
+        ).then(id => {
+            user_id = id;
+            return storeSecretKey(id, key);
+        }
+    ));
+}
+
+function loadPageUpdate(name, target) {
+    //console.log("loadPageUpdate called on: " + target.innerHTML);
+    const openDB = new Promise(resolve => {
+        const openRequest = window.indexedDB.open(dbName, dbVer);
+
+        openRequest.onerror = () => {
+            throw new Error("Opening the local database failed: " + openRequest.error);
+        }
+
+        openRequest.onsuccess = (event) => {
+            resolve(event.target.result);
+        }
+
+        openRequest.onupgradeneeded = (event) => {
+            throw new Error(`Old key store found (v${event.oldVersion}). Please register again.`);
+        }
+    });
+
+    const getSecretKey = openDB.then(db => 
+        new Promise(resolve => {
+            const getRequest = db
+                .transaction(keyStore)
+                .objectStore(keyStore)
+                .get(user_id);
+
+            getRequest.onerror = () => {
+                throw new Error("Key not found: " + getRequest.error);
+            }
+
+            getRequest.onsuccess = (event) => {
+                resolve(event.target.result.key);
+            }
+        })
+    );
+
+    const getHtml = function(template) {
+        return getSecretKey.then(key =>
+            decryptMessage(secure_pii, key)
+        ).then(pii => 
+            mistigri.prrcess(template, JSON.parse(pii))
         );
     }
 
-    // Encrypted personal identifying information (you can share this)
-    const secure_pii = savePII({ 'first-name': "jido", dob: new Date("1999-01-01") }, getSecretKey);
+    name = name.replaceAll(".", "").replaceAll(":", "");    // Sanitise name
 
-    const decryptMessage = function(input, key) {
-        return window.crypto.subtle.decrypt(
-          { name: "AES-GCM", iv: input.iv },
-          key,
-          input.ciphertext
-      );
-    }
-
-    console.log("Decrypting...");
-    const decoder = new TextDecoder();
-    return secure_pii.then(secure_pii =>
-        getSecretKey.then(key =>
-            decryptMessage(secure_pii, key).then(text =>
-                JSON.parse(decoder.decode(text), (info, value) => {
-                    const targets = document.getElementsByClassName(info);
-                    for (var el of targets) {
-                        el.innerHTML = value;
-                    }
-                })
-            )));
+    return fetch(name + ".mi").then(res => {
+        if (!res.ok) {
+            throw new Error(`Status: HTTP ${res.status} - Unable to load update.`);
+        }
+        return res.text();
+    }).then(template =>
+        getHtml(template)
+    ).then(html => {
+        target.innerHTML = html;
+    });
 }
+
+createAccount({ firstName: "jido", dob: new Date("1999-01-01") });
