@@ -1,0 +1,10 @@
+You were born on
+{{#getDate from=dob}}{{$item.toLocaleDateString}}.
+<p>
+  {{#isSameMonth a = today b = $item}}
+  Congratulations, it was this month! Happy birthday 🎂🎉
+  {{/^isSameMonth}}
+  Not this month.
+  {{/isSameMonth}}
+</p>
+{{/getDate}}

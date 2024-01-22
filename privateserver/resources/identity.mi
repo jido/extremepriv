@@ -1,1 +1,6 @@
-You are {{firstName}}.
+<p>
+  You are {{firstName}}.
+</p>
+<div onclick="loadPageUpdate('birthday', this)">
+  Click here to continue
+</div>

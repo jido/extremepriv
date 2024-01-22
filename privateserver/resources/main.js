@@ -150,7 +150,11 @@ function loadPageUpdate(name, target) {
         return getSecretKey.then(key =>
             decryptMessage(secure_pii, key)
         ).then(pii => 
-            mistigri.prrcess(template, JSON.parse(pii))
+            mistigri.prrcess(
+                template,
+                {...JSON.parse(pii), id: user_id, today: new Date(), getDate: o => new Date(o.from), isSameMonth: o => (o.a.getMonth() === o.b.getMonth())},
+                {methodCall: true}
+            )
         );
     }
 
