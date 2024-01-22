@@ -10,6 +10,16 @@ const generateKey = window.crypto.subtle.generateKey(
     ["encrypt", "decrypt"]
 );
 
+function keyAsText(getKey) {
+    return getKey.then(key =>
+        window.crypto.subtle.exportKey("raw", key)
+    ).then(rawKey => {
+        const bytes = new Uint8Array(rawKey);
+        const data = String.fromCharCode.apply(null, bytes);
+        return window.btoa(data);
+    });
+}
+
 function encryptMessage(message, key) {
     const encoder = new TextEncoder();
     const encodedMsg = encoder.encode(message);
@@ -129,7 +139,7 @@ function loadPageUpdate(name, target) {
         }
     });
 
-    const getSecretKey = openDB.then(db => 
+    const getSecretKey = openDB.then(db =>
         new Promise(resolve => {
             const getRequest = db
                 .transaction(keyStore)
@@ -152,7 +162,13 @@ function loadPageUpdate(name, target) {
         ).then(pii => 
             mistigri.prrcess(
                 template,
-                {...JSON.parse(pii), id: user_id, today: new Date(), getDate: o => new Date(o.from), isSameMonth: o => (o.a.getMonth() === o.b.getMonth())},
+                {
+                    ...JSON.parse(pii),
+                    id: user_id,
+                    today: new Date(),
+                    getDate: o => new Date(o.from),
+                    isSameMonth: o => (o.a.getMonth() === o.b.getMonth())
+                },
                 {methodCall: true}
             )
         );
@@ -170,6 +186,67 @@ function loadPageUpdate(name, target) {
     ).then(html => {
         target.outerHTML = html;
     });
+}
+
+function downloadSecretKey() {
+    const openDB = new Promise(resolve => {
+        const openRequest = window.indexedDB.open(dbName, dbVer);
+
+        openRequest.onerror = () => {
+            throw new Error("Opening the local database failed: " + openRequest.error);
+        }
+
+        openRequest.onsuccess = (event) => {
+            resolve(event.target.result);
+        }
+
+        openRequest.onupgradeneeded = (event) => {
+            throw new Error(`Old key store found (v${event.oldVersion}). Please register again.`);
+        }
+    });
+
+    const getSecretKey = openDB.then(db =>
+        new Promise(resolve => {
+            const getRequest = db
+                .transaction(keyStore)
+                .objectStore(keyStore)
+                .get(user_id);
+
+            getRequest.onerror = () => {
+                throw new Error("Key not found: " + getRequest.error);
+            }
+
+            getRequest.onsuccess = (event) => {
+                resolve(event.target.result.key);
+            }
+        })
+    );
+
+    const fileOptions = { suggestedName: `${user_id}.privatekey` };
+
+    if (!!window.showSaveFilePicker) {
+        return window.showSaveFilePicker(fileOptions).then(handle =>
+            handle.createWritable()
+        ).then(stream =>
+            keyAsText(getSecretKey).then(key =>
+                stream.write(key)
+            ).then(() =>
+                stream.close()
+            )
+        );
+    }
+    else {
+        return keyAsText(getSecretKey).then(key => {
+            const blob = new Blob([key], { type: 'application/octet-stream' });
+            const objectUrl = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.download = fileOptions.suggestedName;
+            link.href = objectUrl;
+            link.click();
+            link.remove();
+            URL.revokeObjectURL(objectUrl);
+        });
+    }
 }
 
 createAccount({ firstName: "jido", dob: new Date("1999-01-01") });

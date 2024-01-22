@@ -13,5 +13,7 @@
     <div onclick="loadPageUpdate('identity', this)">
       Click here to continue
     </div>
+    <hr/>
+    <a href="javascript:downloadSecretKey()">Download secret key</a>
   </body>
 </html>
