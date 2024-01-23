@@ -133,7 +133,10 @@ function storeSecretKey(db, id, key) {
 }
 
 function getTemplate(name) {
-    const template = name.replaceAll(".", "").replaceAll(":", "");    // Sanitise name
+    // Sanitise name
+    const template = name
+        .replaceAll(".", "")
+        .replaceAll(":", "");
 
     return fetch(template + ".mi").then(res => {
         if (!res.ok) {
@@ -143,12 +146,11 @@ function getTemplate(name) {
     });
 }
 
-function getHtml(template, pii) {
+function getHtml(template, info) {
     return mistigri.prrcess(
         template,
         {
-            ...pii,
-            id: user_id,
+            ...info,
             // The following is for demo purposes...
             today: new Date(),
             getDate: o => new Date(o.from),
@@ -197,7 +199,9 @@ function createAccount(pii) {
 
 function loadPageUpdate(name, target) {
     //console.log("loadPageUpdate called on: " + target.innerHTML);
-    const getPII = useDB(window.indexedDB.open(dbName, dbVer)).then(db =>
+    const openDB = useDB(window.indexedDB.open(dbName, dbVer));
+
+    const getPII = openDB.then(db =>
         getSecretKey(db, user_id)
     ).then(key =>
         decryptMessage(secure_pii, key)
@@ -205,7 +209,7 @@ function loadPageUpdate(name, target) {
 
     return getTemplate(name).then(template =>
         getPII.then(pii =>
-            getHtml(template, JSON.parse(pii))
+            getHtml(template, {...JSON.parse(pii), id: user_id})
         )
     ).then(html => {
         target.outerHTML = html;
@@ -213,9 +217,11 @@ function loadPageUpdate(name, target) {
 }
 
 function downloadSecretKey() {
+    const openDB = useDB(window.indexedDB.open(dbName, dbVer));
+
     const fileOptions = { suggestedName: `${user_id}.privatekey` };
 
-    return useDB(window.indexedDB.open(dbName, dbVer)).then(db =>
+    return openDB.then(db =>
         keyAsText(getSecretKey(db, user_id))
     ).then(data => {
         if (!!window.showSaveFilePicker) {
@@ -240,7 +246,9 @@ function downloadSecretKey() {
 }
 
 function isUserWithKey(id) {
-    return useDB(window.indexedDB.open(dbName, dbVer)).then(db =>
+    const openDB = useDB(window.indexedDB.open(dbName, dbVer));
+
+    return openDB.then(db =>
         getSecretKey(db, id)
     ).then(key =>
         true
