@@ -16,6 +16,6 @@
     <hr/>
     <a href="javascript:downloadSecretKey()">Download secret key</a>
     <a href="javascript:uploadSecretKey(100)">Upload secret key</a>
-    <a href="javascript:user_id = 100">Reset user id</a>
+    <a href="javascript:(()=>{user_id = 100})()">Reset user id</a>
   </body>
 </html>
