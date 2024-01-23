@@ -63,17 +63,10 @@ const dbName = "SiteSecrets";
 const dbVer = 2;
 const keyStore = "keys";
 
-function createAccount(pii) {
-    const sendAddRequest = function(secure_pii) {
-        // TODO: send data to server
-        return Math.floor(Math.random() * 1000000) + 1;
-    }
-    
-    const openDB = new Promise(resolve => {
-        const openRequest = window.indexedDB.open(dbName, dbVer);
-
+function useDB(openRequest, forWrite) {
+    return new Promise((resolve, reject) => {
         openRequest.onerror = () => {
-            throw new Error("Opening the local database failed: " + openRequest.error);
+            reject(openRequest.error);
         }
 
         openRequest.onsuccess = (event) => {
@@ -81,23 +74,37 @@ function createAccount(pii) {
         }
 
         openRequest.onupgradeneeded = (event) => {
-            // Create database
-            console.log("Creating a key store...");
-            const db = event.target.result;
-            if ((event.oldVersion < dbVer) && db.objectStoreNames.contains(keyStore)) {
-                console.log("Found an old key store, deleting it.");
-                db.deleteObjectStore(keyStore);
+            if (forWrite) {
+                // Create database
+                console.log("Creating a key store...");
+                const db = event.target.result;
+                if ((event.oldVersion < dbVer) && db.objectStoreNames.contains(keyStore)) {
+                    console.log("Found an old key store, deleting it.");
+                    db.deleteObjectStore(keyStore);
+                }
+                db
+                    .createObjectStore(keyStore, { keyPath: "id" })
+                    .transaction
+                    .oncomplete = () => resolve(db);
             }
-            db
-                .createObjectStore(keyStore, { keyPath: "id" })
-                .transaction
-                .oncomplete = () => resolve(db);
+            else {
+                reject(`Old key store found (v${event.oldVersion}). Please register again.`);
+            }
         }
     });
+}
+
+function createAccount(pii) {
+    const sendAddRequest = function(secure_pii) {
+        // TODO: send data to server
+        return Math.floor(Math.random() * 1000000) + 1;
+    }
+
+    const openDB = useDB(window.indexedDB.open(dbName, dbVer), true);
 
     const storeSecretKey = function(id, key) {
         return openDB.then(db =>
-            new Promise(resolve => {
+            new Promise((resolve, reject) => {
                 const transact = db.transaction(keyStore, "readwrite");
                 transact.oncomplete = resolve;
 
@@ -106,9 +113,12 @@ function createAccount(pii) {
                     .add({ id: id, key: key });
 
                 addRequest.onerror = () => {
-                    throw new Error("Saving the new key failed: " + addRequest.error);
-                }
-        }));
+                    reject("Saving the new key failed: " + addRequest.error);
+                };
+            })
+        ).catch(message => {
+            throw new Error(message);
+        });
     }
 
     return generateKey.then(key =>
@@ -121,45 +131,33 @@ function createAccount(pii) {
     ));
 }
 
-function loadPageUpdate(name, target) {
-    //console.log("loadPageUpdate called on: " + target.innerHTML);
-    const openDB = new Promise(resolve => {
-        const openRequest = window.indexedDB.open(dbName, dbVer);
+function getSecretKey(db) {
+    return new Promise(resolve => {
+        const getRequest = db
+            .transaction(keyStore)
+            .objectStore(keyStore)
+            .get(user_id);
 
-        openRequest.onerror = () => {
-            throw new Error("Opening the local database failed: " + openRequest.error);
+        getRequest.onerror = () => {
+            throw new Error("Key not found: " + getRequest.error);
         }
 
-        openRequest.onsuccess = (event) => {
-            resolve(event.target.result);
-        }
-
-        openRequest.onupgradeneeded = (event) => {
-            throw new Error(`Old key store found (v${event.oldVersion}). Please register again.`);
+        getRequest.onsuccess = (event) => {
+            resolve(event.target.result.key);
         }
     });
+}
 
-    const getSecretKey = openDB.then(db =>
-        new Promise(resolve => {
-            const getRequest = db
-                .transaction(keyStore)
-                .objectStore(keyStore)
-                .get(user_id);
-
-            getRequest.onerror = () => {
-                throw new Error("Key not found: " + getRequest.error);
-            }
-
-            getRequest.onsuccess = (event) => {
-                resolve(event.target.result.key);
-            }
-        })
+function loadPageUpdate(name, target) {
+    //console.log("loadPageUpdate called on: " + target.innerHTML);
+    const getPII = useDB(window.indexedDB.open(dbName, dbVer)).then(db =>
+        getSecretKey(db)
+    ).then(key =>
+        decryptMessage(secure_pii, key)
     );
 
     const getHtml = function(template) {
-        return getSecretKey.then(key =>
-            decryptMessage(secure_pii, key)
-        ).then(pii => 
+        return getPII.then(pii =>
             mistigri.prrcess(
                 template,
                 {
@@ -174,14 +172,18 @@ function loadPageUpdate(name, target) {
         );
     }
 
-    name = name.replaceAll(".", "").replaceAll(":", "");    // Sanitise name
+    const getTemplate = function(name) {
+        const template = name.replaceAll(".", "").replaceAll(":", "");    // Sanitise name
 
-    return fetch(name + ".mi").then(res => {
-        if (!res.ok) {
-            throw new Error(`Status: HTTP ${res.status} - Unable to load update.`);
-        }
-        return res.text();
-    }).then(template =>
+        return fetch(template + ".mi").then(res => {
+            if (!res.ok) {
+                throw new Error(`Status: HTTP ${res.status} - Unable to load update.`);
+            }
+            return res.text();
+        });
+    }
+
+    return getTemplate(name).then(template =>
         getHtml(template)
     ).then(html => {
         target.outerHTML = html;
@@ -189,55 +191,21 @@ function loadPageUpdate(name, target) {
 }
 
 function downloadSecretKey() {
-    const openDB = new Promise(resolve => {
-        const openRequest = window.indexedDB.open(dbName, dbVer);
-
-        openRequest.onerror = () => {
-            throw new Error("Opening the local database failed: " + openRequest.error);
-        }
-
-        openRequest.onsuccess = (event) => {
-            resolve(event.target.result);
-        }
-
-        openRequest.onupgradeneeded = (event) => {
-            throw new Error(`Old key store found (v${event.oldVersion}). Please register again.`);
-        }
-    });
-
-    const getSecretKey = openDB.then(db =>
-        new Promise(resolve => {
-            const getRequest = db
-                .transaction(keyStore)
-                .objectStore(keyStore)
-                .get(user_id);
-
-            getRequest.onerror = () => {
-                throw new Error("Key not found: " + getRequest.error);
-            }
-
-            getRequest.onsuccess = (event) => {
-                resolve(event.target.result.key);
-            }
-        })
-    );
-
     const fileOptions = { suggestedName: `${user_id}.privatekey` };
 
-    if (!!window.showSaveFilePicker) {
-        return window.showSaveFilePicker(fileOptions).then(handle =>
-            handle.createWritable()
-        ).then(stream =>
-            keyAsText(getSecretKey).then(key =>
-                stream.write(key)
-            ).then(() =>
-                stream.close()
-            )
-        );
-    }
-    else {
-        return keyAsText(getSecretKey).then(key => {
-            const blob = new Blob([key], { type: 'application/octet-stream' });
+    return useDB(window.indexedDB.open(dbName, dbVer)).then(db =>
+        keyAsText(getSecretKey(db))
+    ).then(data => {
+        if (!!window.showSaveFilePicker) {
+            return window.showSaveFilePicker(fileOptions).then(handle =>
+                handle.createWritable()
+            ).then(stream =>
+                stream.write(data).then(() =>
+                    stream.close()
+            ));
+        }
+        else {
+            const blob = new Blob([data], { type: 'application/octet-stream' });
             const objectUrl = URL.createObjectURL(blob);
             const link = document.createElement('a');
             link.download = fileOptions.suggestedName;
@@ -245,8 +213,8 @@ function downloadSecretKey() {
             link.click();
             link.remove();
             URL.revokeObjectURL(objectUrl);
-        });
-    }
+        }
+    });
 }
 
 createAccount({ firstName: "jido", dob: new Date("1999-01-01") });
