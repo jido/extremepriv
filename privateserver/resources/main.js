@@ -56,7 +56,7 @@ function loadPageUpdate(name, target) {
 function downloadSecretKey() {
     const openDB = useDB(window.indexedDB.open(dbName, dbVer));
 
-    const fileOptions = { suggestedName: `${user_id}.privatekey` };
+    const fileOptions = { suggestedName: `${user_id}.secretkey` };
 
     return openDB.then(db =>
         keyAsText(getSecretKey(db, user_id))
@@ -101,7 +101,7 @@ function uploadSecretKey(id) {
         types: [{
             description: "Secret Keys",
             accept: {
-                "application/*": [".privatekey"]
+                "application/*": [".secretkey"]
             }
         }]
     };
