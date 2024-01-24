@@ -4,8 +4,11 @@
     <meta charset="utf-8" />
     <title>Hello World</title>
     <link rel="stylesheet" href="/main.css">
-    <script type="text/javascript" src="/main.js"></script>
+    <script type="text/javascript" src="/crypto.js"></script>
+    <script type="text/javascript" src="/keystore.js"></script>
+    <script type="text/javascript" src="/dynamic.js"></script>
     <script type="text/javascript" src="/mistigri.js"></script>
+    <script type="text/javascript" src="/main.js"></script>
   </head>
   <body>
     {{>greeting message=message person=person}}
