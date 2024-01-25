@@ -16,3 +16,14 @@ export async function createAccount(privateInfo: SecurePII) {
         console.log(error);
     }
 }
+
+export async function getSecurePII(id: string) {
+    try {
+        console.log("Getting encrypted PII for id " + id);
+        const row = await AppDataSource.getRepository(Account).findOneBy({ id: parseInt(id) });
+        return row.privateinfo;
+    }
+    catch(error) {
+        console.log(error);
+    }
+}

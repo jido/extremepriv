@@ -1,3 +1,18 @@
+function getPII(id) {
+    const id_num = parseInt(id) // Make sure it is a number for the demo
+    return window.fetch("secrets/" + id_num).then(res => {
+        if (!res.ok) {
+            throw new Error(`Status: HTTP ${res.status} ${res.statusText} - Unable to load user information.`);
+        }
+        return res.json().then(payload =>
+            ({
+                iv: bytesFromBase64(payload.iv),
+                ciphertext: bytesFromBase64(payload.ciphertext)
+            })
+        );
+    });
+}
+
 function getTemplate(name) {
     // Sanitise name
     const template = name
@@ -6,7 +21,7 @@ function getTemplate(name) {
 
     return window.fetch(template + ".mi").then(res => {
         if (!res.ok) {
-            throw new Error(`Status: HTTP ${res.status} - Unable to load update.`);
+            throw new Error(`Status: HTTP ${res.status} ${res.statusText} - Unable to load update.`);
         }
         return res.text();
     });

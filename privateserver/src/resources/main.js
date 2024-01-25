@@ -14,6 +14,14 @@ function savePII(pii, key) {
 
 // Functions to use in the page
 
+function login(id) {
+    console.log("login");
+    return getPII(id).then(pii => {
+        user_id = id;
+        secure_pii = pii;
+    });
+}
+
 function createAccount(pii) {
     const openDB = useDB(window.indexedDB.open(dbName, dbVer), true);
 
@@ -25,6 +33,7 @@ function createAccount(pii) {
             })
         ).then(id => {
             user_id = id;
+
             return openDB.then(db =>
                 storeSecretKey(db, id, key)
             );
@@ -84,11 +93,7 @@ function isUserWithKey(id) {
     const openDB = useDB(window.indexedDB.open(dbName, dbVer));
 
     return openDB.then(db =>
-        getSecretKey(db, id)
-    ).then(key =>
-        true
-    ).catch(e =>
-        false
+        containsSecretKey(db, id)
     );
 }
 
@@ -134,4 +139,18 @@ function uploadSecretKey(id) {
 
 // Sample data
 
-createAccount({ firstName: "jido", dob: new Date("1999-01-01") });
+function tryUser(id) {
+    return isUserWithKey(id).then(yes => {
+        if (yes) {
+            return login(id);
+        }
+        else if (id < 100) {
+            return tryUser(id + 1);
+        }
+        else {
+            console.log("Too many attempts: " + id);
+            return createAccount({ firstName: "jido", dob: new Date("1999-01-01") });
+        }
+    });
+}
+tryUser(0);

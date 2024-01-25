@@ -13,7 +13,7 @@ function useDB(openRequest, forWrite) {
         }
 
         openRequest.onupgradeneeded = (event) => {
-            if (forWrite) {
+            if (forWrite || event.oldVersion === 0) {
                 // Create database
                 console.log("Creating a key store...");
                 const db = event.target.result;
@@ -48,6 +48,18 @@ function getSecretKey(db, id) {
             resolve(event.target.result.key);
         }
     });
+}
+
+function containsSecretKey(db, id) {
+    return new Promise(resolve =>
+        db
+            .transaction(keyStore)
+            .objectStore(keyStore)
+            .openCursor(IDBKeyRange.only(id))
+            .onsuccess = (event) => {
+                resolve(!!event.target.result)
+            }
+    );
 }
 
 function storeSecretKey(db, id, key) {
