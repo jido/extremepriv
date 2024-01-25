@@ -15,16 +15,14 @@ function savePII(pii, key) {
 // Functions to use in the page
 
 function createAccount(pii) {
-    const sendAddRequest = function(secure_pii) {
-        // TODO: send data to server
-        return Math.floor(Math.random() * 1000000) + 1;
-    }
-
     const openDB = useDB(window.indexedDB.open(dbName, dbVer), true);
 
     return generateKey.then(key =>
         savePII(pii, key).then(secure_pii =>
-            sendAddRequest(secure_pii)
+            postData("create", {
+                iv: bytesAsBase64(secure_pii.iv),
+                ciphertext: bytesAsBase64(secure_pii.ciphertext)
+            })
         ).then(id => {
             user_id = id;
             return openDB.then(db =>

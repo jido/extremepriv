@@ -12,28 +12,34 @@ const generateKey = window.crypto.subtle.generateKey(
     keyUsages
 );
 
+function bytesAsBase64(binary) {
+    const rawstr = String.fromCharCode.apply(null, binary)
+    return window.btoa(rawstr);
+}
+
+function bytesFromBase64(encoded) {
+    const rawstr = window.atob(encoded);
+    return Uint8Array.from(rawstr, b => b.codePointAt(0));
+}
+
 function keyAsText(getKey) {
     return getKey.then(key =>
         window.crypto.subtle.exportKey("raw", key)
-    ).then(rawKey => {
-        const bytes = new Uint8Array(rawKey);
-        const data = String.fromCharCode.apply(null, bytes);
-        return window.btoa(data);
-    });
+    ).then(rawKey =>
+        bytesAsBase64(new Uint8Array(rawKey))
+    );
 }
 
 function keyFromText(getText) {
-    return getText.then(text => {
-        const binary = window.atob(text);
-        const bytes = Uint8Array.from(binary, b => b.codePointAt(0));
-        return window.crypto.subtle.importKey(
+    return getText.then(text =>
+        window.crypto.subtle.importKey(
             "raw",
-            bytes,
+            bytesFromBase64(text),
             keyAlgorithm,
             true,
             keyUsages
-        );
-    });
+        )
+    );
 }
 
 function encryptMessage(message, key) {
@@ -47,7 +53,7 @@ function encryptMessage(message, key) {
     );
     return result.then(encrypted => ({
         iv: iv,
-        ciphertext: encrypted
+        ciphertext: new Uint8Array(encrypted)
     }));
 }
 

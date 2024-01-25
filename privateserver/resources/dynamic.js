@@ -25,3 +25,15 @@ function getHtml(template, info) {
         {methodCall: true}
     );
 }
+
+function postData(url = "", data = {}) {
+    const request = window.fetch(url, {
+        method: "POST",
+        cache: "no-cache",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+    });
+    return request.then(response =>
+        response.json()
+    );
+}
