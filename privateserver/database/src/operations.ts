@@ -17,11 +17,13 @@ export async function createAccount(privateInfo: SecurePII) {
     }
 }
 
-export async function getSecurePII(id: string) {
+export async function getSecurePII(id: number) {
     try {
         console.log("Getting encrypted PII for id " + id);
-        const row = await AppDataSource.getRepository(Account).findOneBy({ id: parseInt(id) });
-        return row.privateinfo;
+        const row = await AppDataSource.getRepository(Account).findOneBy({ id: id });
+        if (row) {
+            return row.privateinfo;
+        }
     }
     catch(error) {
         console.log(error);

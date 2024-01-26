@@ -12,7 +12,7 @@ export class AppController {
     }
     
     @Get('secrets/:id')
-    secrets(@Param('id') id: string) {
+    secrets(@Param('id') id: number) {
         return getSecurePII(id);
     }
     
