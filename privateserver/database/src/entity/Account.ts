@@ -17,7 +17,7 @@ export class Account {
     @Column({ length: 10, nullable: true })
     theme: string
 
-    @Column("timestamp", { default: () => "now()" })
+    @Column("datetime", { default: () => "current_timestamp" })
     lastvisit: Date
 
 }

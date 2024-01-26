@@ -3,13 +3,9 @@ import { DataSource } from "typeorm"
 import { Account } from "./entity/Account"
 
 export const AppDataSource = new DataSource({
-    type: "mysql",
-    host: "localhost",
-    port: 3306,
-    username: "extremepriv",
-    password: "!!!dev!!!",
-    database: "site",
-    synchronize: false,
+    type: "sqlite",
+    database: "site.sq3",
+    synchronize: true,
     logging: false,
     entities: [Account],
     migrations: [],
