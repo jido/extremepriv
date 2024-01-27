@@ -48,7 +48,7 @@ The encrypted PII is sent to the server so it can be accessed from multiple clie
 
 Exchange of personal information between client and server will be done using WebSockets.
 
-Push notifications will be received using polling. An actual application it would probably use the push framework provided by the operating system.
+Push notifications will be received using polling. An actual application could use the push framework provided by the operating system. To reduce the privacy impact, as little data as possible should be given to that framework - in particular there should be no user ID.
 
 The server is based on NestJS and SQLite3. Open the `privateserver` folder for more details.
 
@@ -62,6 +62,6 @@ Examples of such actions include shipping physical goods to the user doorstep, r
 
 Some personal information lies in a grey area between public and private, like the e-mail address and phone number of the user.
 
-A compliant service can allow the user to register them outside of the boundaries of personal identifiable information as long as they are clearly labelled as non-private.
+A compliant service can allow the user to register them outside of the boundaries of personal identifiable information as long as they are clearly labelled as non-private and "at your own risk".
 
 If they are kept private, the app has no means to contact the user other than push notifications and in-app messages.
