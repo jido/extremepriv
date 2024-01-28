@@ -13,6 +13,19 @@ function savePII(pii, key) {
 
 
 // Functions to use in the page
+function showTab(evt, id) {
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tab-content");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].classList.add("d-none");
+    }
+    tablinks = document.getElementsByClassName("tab-link");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+    document.getElementById(id).className = document.getElementById(id).className.replace(" d-none", "");
+    evt.currentTarget.className += " active";
+}
 
 function login(id) {
     console.log("login");

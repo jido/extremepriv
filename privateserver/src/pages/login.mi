@@ -1,0 +1,31 @@
+<div class="tab-wrapper bloc">
+    
+    <div class="tab grid-2-col-same">
+        <button class="tab-link active" onclick="showTab(event, 'new-account')">Create account</button>
+        <button class="tab-link" onclick="showTab(event, 'login')">Login</button>
+    </div>
+
+    <div id="new-account" class="tab-content login-tab grid-3-col-auto">
+       
+        <label>First name</label>
+        <input type="text" id="first-name">
+    
+        <label>Last name</label>
+        <input type="text" id="last-name">
+
+        <button id="submit-new" type="submit">Submit</button>
+    </div>
+    <div id="login" class="tab-content login-tab grid-3-col-auto d-none">
+            
+        <label>User ID</label>
+        <input type="text" id="user-id">
+
+        <label>Key required</label>
+        <label id="upload-key-label" for="upload-key">
+            <input type="file" id="upload-key">
+            Select a File
+        </label>
+
+        <button id="submit-login" type="submit">Enter</button>
+    </div>
+</div>

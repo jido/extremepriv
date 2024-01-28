@@ -1,0 +1,191 @@
+:root {
+  /* gris
+  --color-light: #f1f1f1;
+  --color-dark: #555;
+  --color-hover: #ddd;
+  --color-active: #ccc;
+  */
+  
+  --color-lighter: #f4f1de;
+  --color-light: #f2cc8f;
+  --color-dark: #3d405b;
+  --color-hover: #81b29a;
+  --color-active: #e07a5f;
+  --color-border: #ccc;
+}
+
+body {
+  font-family: Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.bloc {
+  border: 1px solid var(--color-border);
+  background-color: var(--color-lighter);
+}
+
+/* Style the tab */
+.tab {
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-light);
+  padding: .5rem;
+}
+
+/* Style the tab content */
+.tab-content {
+  display: none;
+  padding: 1rem 0.75rem;
+  border-top: none;
+}
+
+.tab button {
+  border: none;
+  background-color: inherit;
+}
+
+/* Change active tab button background color */
+.tab button.active {
+  background-color: var(--color-active);
+}
+
+.tab-content {
+  font-size: 1.1rem;
+}
+
+.tab-content > button {
+  width: fit-content;
+  padding: 0.5rem 1.5rem;
+  background-color: var(--color-light);
+  margin: auto;
+}
+
+label[for] {
+  font-variant: small-caps;
+}
+
+label[for] > input[type="file"] {
+  display: none;
+}
+
+button {
+  border-radius: .2rem;
+  border: 1px solid var(--color-border);
+  padding: 1rem;
+  cursor: pointer;
+  transition: 0.3s;
+  font-size: 1.1rem;
+}
+
+label[for], a, div[onclick] {
+  border: 1px solid var(--color-border);
+  border-radius: .2rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  height: inherit;
+  text-align: center;
+}
+
+a, div[onclick] {
+  padding: 1rem;
+}
+
+button, a {
+  background-color: var(--color-light);
+}
+
+button.color-inverse, a.color-inverse, div[onclick] {
+  background-color: var(--color-dark);
+  color: var(--color-light);
+}
+
+a:hover, button:hover, div[onclick]:hover {
+  transform: scale(1.05);
+}
+
+button:hover {
+  background-color: var(--color-hover);
+}
+
+label[for]:hover {
+  background-color: var(--color-light);
+}
+
+a:hover, div[onclick]:hover {
+  background-color: var(--color-hover);
+  color: unset;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* hide */
+.d-none {
+  display: none!important;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+  gap: .75rem;
+}
+
+/* displays content on a line, with equal, small spacing */
+.flex-line {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+
+.flex-line.flex-max {
+  width: 100%;
+}
+
+.flex-max > * {
+  flex-grow: 1;
+}
+
+/* Content fill two columns of same width */
+.grid-2-col-same {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  align-items: center;
+  gap: .5rem;
+}
+
+.grid-3-col-same {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  align-items: center;
+  gap: .5rem;
+}
+
+/* Content fill two columns, width depends on content */
+.grid-2-col-auto {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  align-items: center;
+  gap: .5rem;
+}
+
+.grid-3-col-auto {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  align-items: center;
+  gap: .5rem;
+}
+
+/* width depends on content */
+.fit-content {
+  width: fit-content;
+}
+
+.w-100 {
+  width: 100%;
+}
+
+/* centers by applying margins */
+.m-auto {
+  margin: auto;
+}

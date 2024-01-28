@@ -3,7 +3,8 @@
   <head>
     <meta charset="utf-8" />
     <title>Hello World</title>
-    <link rel="stylesheet" href="/main.css">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/specific.css">
     <script type="text/javascript" src="/crypto.js"></script>
     <script type="text/javascript" src="/keystore.js"></script>
     <script type="text/javascript" src="/dynamic.js"></script>
@@ -11,14 +12,21 @@
     <script type="text/javascript" src="/main.js"></script>
   </head>
   <body>
-    {{>greeting message=message person=person}}
-    <hr/>
-    <div onclick="loadPageUpdate('identity', this)">
-      Click here to continue
+    <div class="fit-content flex-column" style="align-items: center; margin: 2rem auto;">
+      <div class="flex-line flex-max">
+        {{>login}}
+        <div class="flex-column greeting bloc">
+          {{>greeting message=message person=person}}
+        </div>
+      </div>
+      <div onclick="loadPageUpdate('identity', this)">
+        Click here to continue
+      </div>
+      <div class="grid-3-col-same w-100">
+        <a href="javascript:downloadSecretKey()">Download secret key</a>
+        <a href="javascript:uploadSecretKey(100)">Upload secret key</a>
+        <a href="javascript:(()=>{user_id = 100})()">Reset user id</a>
+      </div>
     </div>
-    <hr/>
-    <a href="javascript:downloadSecretKey()">Download secret key</a>
-    <a href="javascript:uploadSecretKey(100)">Upload secret key</a>
-    <a href="javascript:(()=>{user_id = 100})()">Reset user id</a>
   </body>
 </html>
