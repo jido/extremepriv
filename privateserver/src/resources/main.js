@@ -118,6 +118,19 @@ function isUserWithKey(id) {
     });
 }
 
+function init() {
+    const openDB = useDB(window.indexedDB.open(dbName, dbVer));
+
+    return openDB.then(db =>
+        lastAccountId(db)
+    ).then(id => {
+        if (id !== null) {
+            document.getElementById('user-id').value = id;
+            user_id = id;
+        }
+    });
+}
+
 function uploadSecretKey(file) {
     const openDB = useDB(window.indexedDB.open(dbName, dbVer), true);
 

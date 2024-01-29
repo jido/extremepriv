@@ -62,6 +62,19 @@ function containsSecretKey(db, id) {
     );
 }
 
+function lastAccountId(db) {
+    return new Promise(resolve =>
+        db
+            .transaction(keyStore)
+            .objectStore(keyStore)
+            .openCursor(null, "prev")
+            .onsuccess = (event) => {
+                const result = event.target.result;
+                resolve(result ? result.value.id : null);
+            }
+    );
+}
+
 function storeSecretKey(db, id, key) {
     return new Promise((resolve, reject) => {
         const transact = db.transaction(keyStore, "readwrite");
