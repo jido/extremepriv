@@ -26,7 +26,7 @@
         <label>Date of birth</label>
         <input type="date" value="2004-01-01" min="1900-01-01" name="dob" id="dob">
 
-        <button id="submit-new" type="button" onclick="createAccount(formJson(this.parentElement))">Submit</button>
+        <button id="submit-new" type="submit" onclick="createAccount(formJson(this.parentElement))">Submit</button>
         
         <div>
             The information above will be local to your device.
@@ -37,14 +37,14 @@
     <div id="login" class="tab-content login-tab grid-3-col-auto d-none">
             
         <label>User ID</label>
-        <input type="text" id="user-id">
+        <input type="text" id="user-id" onchange="isUserWithKey(parseInt(this.value))">
 
-        <label>Key required</label>
+        <label>Secret key</label>
         <label id="upload-key-label" for="upload-key">
-            <input type="file" id="upload-key">
-            Select a File
+            <input type="file" id="upload-key" disabled onchange="uploadSecretKey(this.files[0])">
+            Key required - Select a File
         </label>
 
-        <button id="submit-login" type="submit">Enter</button>
+        <button id="submit-login" type="submit" onclick="login(user_id)">Enter</button>
     </div>
 </div>

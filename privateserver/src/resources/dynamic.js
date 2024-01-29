@@ -4,6 +4,7 @@ function getPII(id) {
         if (!res.ok) {
             throw new Error(`Status: HTTP ${res.status} ${res.statusText} - Unable to load user information.`);
         }
+
         return res.json().then(payload =>
             ({
                 iv: bytesFromBase64(payload.iv),
@@ -54,7 +55,6 @@ function postData(url = "", data = {}) {
 }
 
 function formJson(form) {
-    form.addEventListener('submit', (event) => {event.preventDefault();});
     const values = new FormData(form);
     const result = {};
     for (const [key, value] of values) {

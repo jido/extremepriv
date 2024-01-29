@@ -13,6 +13,7 @@ function savePII(pii, key) {
 
 
 // Functions to use in the page
+
 function showTab(evt, id) {
     var i, tabcontent, tablinks;
     tabcontent = document.getElementsByClassName("tab-content");
@@ -107,63 +108,21 @@ function isUserWithKey(id) {
 
     return openDB.then(db =>
         containsSecretKey(db, id)
-    );
+    ).then(found => {
+        document.getElementById("upload-key").disabled = found;
+        user_id = id;
+        return found;
+    });
 }
 
-function uploadSecretKey(id) {
+function uploadSecretKey(file) {
     const openDB = useDB(window.indexedDB.open(dbName, dbVer), true);
 
-    const fileOptions = {
-        types: [{
-            description: "Secret Keys",
-            accept: {
-                "application/*": [".secretkey"]
-            }
-        }]
-    };
-    
-    if (!!window.showOpenFilePicker) {
-        return window.showOpenFilePicker(fileOptions).then(handles =>
-            handles[0].getFile()
-        ).then(file =>
-            keyFromText(file.text())
-        ).then(key =>
+    if (file) {
+        return keyFromText(file.text()).then(key =>
             openDB.then(db =>
-                storeSecretKey(db, id, key)
+                storeSecretKey(db, user_id, key)
             )
         );
     }
-    else {
-        const input = document.createElement("input");
-        input.type = "file";
-        input.onchange = event => { 
-            const file = event.target.files[0]; 
-            return keyFromText(file.text()).then(key =>
-                openDB.then(db =>
-                    storeSecretKey(db, id, key)
-                )
-            );
-        }
-        input.click();
-        input.remove();
-    }
 }
-
-
-// Sample data
-
-function tryUser(id) {
-    return isUserWithKey(id).then(yes => {
-        if (yes) {
-            return login(id);
-        }
-        else if (id < 100) {
-            return tryUser(id + 1);
-        }
-        else {
-            console.log("Too many attempts: " + id);
-            return createAccount({ firstName: "jido", dob: new Date("1999-01-01") });
-        }
-    });
-}
-tryUser(0);
