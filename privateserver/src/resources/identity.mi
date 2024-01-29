@@ -1,6 +1,10 @@
 <p>
-  You are {{firstName}}.
+    You are {{firstName}}.
 </p>
 <div onclick="loadPageUpdate('birthday', this)">
-  Click here to continue
+    Click here to continue
+</div>
+<div class="grid-2-col-same w-100">
+    <a href="javascript:downloadSecretKey()">Download secret key</a>
+    <a href="/">Log out</a>
 </div>

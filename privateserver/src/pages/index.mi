@@ -13,14 +13,8 @@
   </head>
   <body>
     <div class="fit-content flex-column" style="align-items: center; margin: 2rem auto;">
-      <div class="flex-line flex-max">
+      <div class="flex-line flex-max" id="main">
         {{>login}}
-      </div>
-      <div onclick="loadPageUpdate('identity', this)">
-        Click here to continue
-      </div>
-      <div class="grid-3-col-same w-100">
-        <a href="javascript:downloadSecretKey()">Download secret key</a>
       </div>
     </div>
   </body>

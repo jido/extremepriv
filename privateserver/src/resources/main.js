@@ -33,6 +33,7 @@ function login(id) {
     return getPII(id).then(pii => {
         user_id = id;
         secure_pii = pii;
+        loadPageUpdate("identity", document.getElementById("main"));
     });
 }
 
@@ -50,7 +51,9 @@ function createAccount(pii) {
 
             return openDB.then(db =>
                 storeSecretKey(db, id, key)
-            );
+            ).then(() => {
+                loadPageUpdate("identity", document.getElementById("main"));
+            });
         }
     ));
 }
