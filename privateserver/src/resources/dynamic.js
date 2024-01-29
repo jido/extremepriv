@@ -37,7 +37,7 @@ function getHtml(template, info) {
             getDate: o => new Date(o.from),
             isSameMonth: o => (o.a.getMonth() === o.b.getMonth())
         },
-        {methodCall: true}
+        { methodCall: true, placeholder: "<unknown>" }
     );
 }
 
@@ -51,4 +51,14 @@ function postData(url = "", data = {}) {
     return request.then(response =>
         response.json()
     );
+}
+
+function formJson(form) {
+    form.addEventListener('submit', (event) => {event.preventDefault();});
+    const values = new FormData(form);
+    const result = {};
+    for (const [key, value] of values) {
+        result[key] = value;
+    }
+    return result;
 }

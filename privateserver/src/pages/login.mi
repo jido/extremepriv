@@ -5,16 +5,35 @@
         <button class="tab-link" onclick="showTab(event, 'login')">Login</button>
     </div>
 
-    <div id="new-account" class="tab-content login-tab grid-3-col-auto">
-       
+    <form id="new-account" class="tab-content login-tab grid-3-col-auto" onsubmit="return false">
         <label>First name</label>
-        <input type="text" id="first-name">
-    
-        <label>Last name</label>
-        <input type="text" id="last-name">
+        <input type="text" name="firstName" id="firstName">
 
-        <button id="submit-new" type="submit">Submit</button>
-    </div>
+        <label>Last name</label>
+        <input type="text" name="lastName" id="lastName">
+    
+        <label>Sex</label>
+        <select name="sex" id="sex">
+            <option></option>
+            <option value="F">female</option>
+            <option value="M">male</option>
+            <option value="O">other</option>
+        </select>
+    
+        <label>E-mail address</label>
+        <input type="text" name="email" id="email">
+    
+        <label>Date of birth</label>
+        <input type="date" value="2004-01-01" min="1900-01-01" name="dob" id="dob">
+
+        <button id="submit-new" type="button" onclick="createAccount(formJson(this.parentElement))">Submit</button>
+        
+        <div>
+            The information above will be local to your device.
+        </div><div>
+            An encrypted copy is saved on the webserver but it cannot be read there.
+        </div>
+    </form>
     <div id="login" class="tab-content login-tab grid-3-col-auto d-none">
             
         <label>User ID</label>

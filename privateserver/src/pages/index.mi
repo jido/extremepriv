@@ -11,13 +11,10 @@
     <script type="text/javascript" src="/mistigri.js"></script>
     <script type="text/javascript" src="/main.js"></script>
   </head>
-  <body>
+  <body onload="document.getElementById('dob').max=new Date().toISOString().substring(0, 10)">
     <div class="fit-content flex-column" style="align-items: center; margin: 2rem auto;">
       <div class="flex-line flex-max">
         {{>login}}
-        <div class="flex-column greeting bloc">
-          {{>greeting message=message person=person}}
-        </div>
       </div>
       <div onclick="loadPageUpdate('identity', this)">
         Click here to continue
