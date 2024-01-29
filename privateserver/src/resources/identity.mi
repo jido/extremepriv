@@ -1,10 +1,10 @@
 <p>
-    You are {{firstName}}.
+    You are <span title="Your name is just a placeholder on the server, which is filled in locally">{{firstName}}.</span>
 </p>
-<div onclick="loadPageUpdate('birthday', this)">
+<div onclick="loadPageUpdate('birthday', this)" title="All personal info is inserted by the browser after loading a page template from the server">
     Click here to continue
 </div>
 <div class="grid-2-col-same w-100">
-    <a href="javascript:downloadSecretKey()">Download secret key</a>
-    <a href="/">Log out</a>
+    <a href="javascript:downloadSecretKey()" title="The secret key is needed to load the account later. Click if you want to login with a different browser">Download secret key</a>
+    <a href="/" title="Return to the login page">Log out</a>
 </div>

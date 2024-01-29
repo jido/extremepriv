@@ -5,7 +5,7 @@
         <button class="tab-link" onclick="showTab(event, 'login')">Login</button>
     </div>
 
-    <form id="new-account" class="tab-content login-tab grid-3-col-auto" onsubmit="return false">
+    <form id="new-account" class="tab-content login-tab grid-3-col-auto" onsubmit="return false" title="The information will be local to your device. An encrypted copy is saved on the webserver but it cannot be read there">
         <label>First name</label>
         <input type="text" name="firstName" id="firstName">
 
@@ -26,25 +26,19 @@
         <label>Date of birth</label>
         <input type="date" value="2004-01-01" min="1900-01-01" name="dob" id="dob">
 
-        <button id="submit-new" type="submit" onclick="createAccount(formJson(this.parentElement))">Submit</button>
-        
-        <div>
-            The information above will be local to your device.
-        </div><div>
-            An encrypted copy is saved on the webserver but it cannot be read there.
-        </div>
+        <button id="submit-new" type="submit" onclick="createAccount(formJson(this.parentElement))" title="The secret key and user ID for the new account are saved locally on account creation">Submit</button>
     </form>
     <div id="login" class="tab-content login-tab grid-3-col-auto d-none">
             
         <label>User ID</label>
-        <input type="text" id="user-id" onchange="isUserWithKey(parseInt(this.value))">
+        <input type="text" id="user-id" onchange="isUserWithKey(parseInt(this.value))" title="The user ID is part of the filename of a downloaded key">
 
         <label>Secret key</label>
-        <label id="upload-key-label" for="upload-key">
+        <label id="upload-key-label" for="upload-key" title="Uploading the key is only needed if the user ID is used for the first time in this browser">
             <input type="file" id="upload-key" disabled onchange="uploadSecretKey(this.files[0])">
             Key required - Select a File
         </label>
 
-        <button id="submit-login" type="submit" onclick="login(user_id)">Enter</button>
+        <button id="submit-login" type="submit" onclick="login(user_id)" title="The key is used to decrypt the personal information associated with the user ID after login">Enter</button>
     </div>
 </div>
