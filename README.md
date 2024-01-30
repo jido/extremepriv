@@ -8,7 +8,7 @@ Extreme privacy demo page
 
 ## about extreme privacy
 
-I have had enough of seeing my private information fall in the wrong hands. Extreme privacy aims to solve the issue once and for all.
+I have had enough of seeing my private information fall into the clutches of wrongdoers. Extreme privacy aims to solve the issue once and for all.
 
 **The first principle** of the scheme is that personally identifiable information (PII) belongs in the hands of the user, not in the hands of large organisations.
 
