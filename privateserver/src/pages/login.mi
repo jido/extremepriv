@@ -28,7 +28,7 @@
 
         <button id="submit-new" type="submit" onclick="createAccount(formJson(this.parentElement))" title="The secret key and user ID for the new account are saved locally on account creation">Submit</button>
     </form>
-    <div id="login" class="tab-content login-tab grid-3-col-auto d-none">
+    <div id="login" class="tab-content login-tab grid-3-col-auto d-none" title="The secret key is saved in the browser. It is never shared with the server">
             
         <label>User ID</label>
         <input type="text" id="user-id" oninput="isUserWithKey(parseInt(this.value))" title="The user ID is part of the filename of a downloaded key">
