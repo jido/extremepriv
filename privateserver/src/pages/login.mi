@@ -31,7 +31,7 @@
     <div id="login" class="tab-content login-tab grid-3-col-auto d-none" title="The secret key is saved in the browser. It is never shared with the server">
             
         <label>User ID</label>
-        <input type="text" id="user-id" oninput="isUserWithKey(parseInt(this.value))" title="The user ID is part of the filename of a downloaded key">
+        <input type="text" autocomplete="off" id="user-id" oninput="isUserWithKey(parseInt(this.value))" title="The user ID is part of the filename of a downloaded key">
 
         <label>Secret key</label>
         <label id="upload-key-label" for="upload-key" title="Uploading the key is only needed if the user ID is used for the first time in this browser">
