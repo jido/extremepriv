@@ -31,13 +31,15 @@
     <div id="login" class="tab-content login-tab grid-3-col-auto d-none">
             
         <label>User ID</label>
-        <input type="text" id="user-id" onchange="isUserWithKey(parseInt(this.value))" title="The user ID is part of the filename of a downloaded key">
+        <input type="text" id="user-id" oninput="isUserWithKey(parseInt(this.value))" title="The user ID is part of the filename of a downloaded key">
 
         <label>Secret key</label>
         <label id="upload-key-label" for="upload-key" title="Uploading the key is only needed if the user ID is used for the first time in this browser">
             <input type="file" id="upload-key" disabled onchange="uploadSecretKey(this.files[0])">
-            Key required - Select a File
+            Select a File
         </label>
+
+        <div></div><div id="key-status"></div>
 
         <button id="submit-login" type="submit" onclick="login(user_id)" title="The key is used to decrypt the personal information associated with the user ID after login">Enter</button>
     </div>

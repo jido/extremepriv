@@ -109,13 +109,20 @@ function downloadSecretKey() {
 function isUserWithKey(id) {
     const openDB = useDB(window.indexedDB.open(dbName, dbVer));
 
-    return openDB.then(db =>
-        containsSecretKey(db, id)
-    ).then(found => {
-        document.getElementById("upload-key").disabled = found;
-        user_id = id;
-        return found;
-    });
+    if (isNaN(id)) {
+        document.getElementById("key-status").setHTML("");
+        return false;
+    }
+    else {
+        return openDB.then(db =>
+            containsSecretKey(db, id)
+        ).then(found => {
+            document.getElementById("upload-key").disabled = found;
+            document.getElementById("key-status").setHTML(found ? "Saved" : "Required for user ID " + id);
+            user_id = id;
+            return found;
+        });
+    }
 }
 
 function init() {
@@ -126,6 +133,7 @@ function init() {
     ).then(id => {
         if (id !== null) {
             document.getElementById('user-id').value = id;
+            document.getElementById("key-status").setHTML("Saved");
             user_id = id;
         }
     });
@@ -138,7 +146,9 @@ function uploadSecretKey(file) {
         return keyFromText(file.text()).then(key =>
             openDB.then(db =>
                 storeSecretKey(db, user_id, key)
-            )
+            ).then(() => {
+                document.getElementById("key-status").setHTML("Saved");
+            })
         );
     }
 }
