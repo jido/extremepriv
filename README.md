@@ -2,6 +2,8 @@
 
 Extreme privacy demo page
 
+[Try it!](https://extremepriv.bredelet.com)
+||
 [Read more](https://medium.com/@bredelet/we-can-have-extreme-privacy-ea424a797e83)
 
 ## about extreme privacy
@@ -22,7 +24,7 @@ Holding on to it after the user leaves the app (or closes the webpage) is prohib
 
 ## demonstration of extreme privacy
 
-The demo page offers to create a user account by entering name, date of birth and other *personal information*.
+[The demo page](https://extremepriv.bredelet.com) offers to create a user account by entering name, date of birth and other *personal information*.
 
 However the information is immediately encrypted using a *cipher key* which stays on the user device.
 
