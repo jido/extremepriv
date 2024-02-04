@@ -34,7 +34,7 @@
         <input type="text" autocomplete="off" id="user-id" oninput="isUserWithKey(parseInt(this.value))" title="The user ID is part of the filename of a downloaded key">
 
         <label>Secret key</label>
-        <label id="upload-key-label" for="upload-key" title="Uploading the key is only needed if the user ID is used for the first time in this browser">
+        <label id="upload-key-label" for="upload-key" class="disabled" title="Uploading the key is only needed if the user ID is used for the first time in this browser">
             <input type="file" id="upload-key" disabled onchange="uploadSecretKey(this.files[0])">
             Select a File
         </label>

@@ -22,10 +22,10 @@ function showTab(evt, id) {
     }
     tablinks = document.getElementsByClassName("tab-link");
     for (i = 0; i < tablinks.length; i++) {
-        tablinks[i].className = tablinks[i].className.replace(" active", "");
+        tablinks[i].classList.remove("active");
     }
-    document.getElementById(id).className = document.getElementById(id).className.replace(" d-none", "");
-    evt.currentTarget.className += " active";
+    document.getElementById(id).classList.remove("d-none");
+    evt.currentTarget.classList.add("active");
 }
 
 function login(id) {
@@ -111,6 +111,11 @@ function isUserWithKey(id) {
 
     const updateState = function(found) {
         document.getElementById("upload-key").disabled = found;
+        if (found) {
+            document.getElementById("upload-key-label").classList.remove('disabled');
+        } else {
+            document.getElementById("upload-key-label").classList.add("disabled");
+        }
         document.getElementById("key-status").innerHTML = ( found ? "Saved" : "Required for user ID " + id );
         user_id = id;
         return found;
@@ -139,6 +144,7 @@ function init() {
         if (id !== null) {
             document.getElementById('user-id').value = id;
             document.getElementById("key-status").innerHTML = "Saved";
+            document.getElementById("upload-key-label").classList.remove("disabled");
             user_id = id;
         }
     }).catch(() => null);
