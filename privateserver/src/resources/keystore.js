@@ -2,7 +2,7 @@ const dbName = "SiteSecrets";
 const dbVer = 2;
 const keyStore = "keys";
 
-function useDB(openRequest, forWrite) {
+function useLocalDB(openRequest, forWrite) {
     return new Promise((resolve, reject) => {
         openRequest.onerror = () => {
             reject(openRequest.error);
@@ -14,17 +14,17 @@ function useDB(openRequest, forWrite) {
 
         openRequest.onupgradeneeded = (event) => {
             if (forWrite || event.oldVersion === 0) {
-                // Create database
+                // Create local database
                 console.log("Creating a key store...");
-                const db = event.target.result;
-                if ((event.oldVersion < dbVer) && db.objectStoreNames.contains(keyStore)) {
+                const localDB = event.target.result;
+                if ((event.oldVersion < dbVer) && localDB.objectStoreNames.contains(keyStore)) {
                     console.log("Found an old key store, deleting it.");
-                    db.deleteObjectStore(keyStore);
+                    localDB.deleteObjectStore(keyStore);
                 }
-                db
+                localDB
                     .createObjectStore(keyStore, { keyPath: "id" })
                     .transaction
-                    .oncomplete = () => resolve(db);
+                    .oncomplete = () => resolve(localDB);
             }
             else {
                 reject(`Old key store found (v${event.oldVersion}). Please register again.`);
@@ -33,9 +33,9 @@ function useDB(openRequest, forWrite) {
     });
 }
 
-function getSecretKey(db, id) {
+function getSecretKey(localDB, id) {
     return new Promise((resolve, reject) => {
-        const getRequest = db
+        const getRequest = localDB
             .transaction(keyStore)
             .objectStore(keyStore)
             .get(id);
@@ -50,9 +50,9 @@ function getSecretKey(db, id) {
     });
 }
 
-function containsSecretKey(db, id) {
+function containsSecretKey(localDB, id) {
     return new Promise(resolve =>
-        db
+        localDB
             .transaction(keyStore)
             .objectStore(keyStore)
             .openCursor(IDBKeyRange.only(id))
@@ -62,9 +62,9 @@ function containsSecretKey(db, id) {
     );
 }
 
-function lastAccountId(db) {
+function lastAccountId(localDB) {
     return new Promise(resolve =>
-        db
+        localDB
             .transaction(keyStore)
             .objectStore(keyStore)
             .openCursor(null, "prev")
@@ -75,9 +75,9 @@ function lastAccountId(db) {
     );
 }
 
-function storeSecretKey(db, id, key) {
+function storeSecretKey(localDB, id, key) {
     return new Promise((resolve, reject) => {
-        const transact = db.transaction(keyStore, "readwrite");
+        const transact = localDB.transaction(keyStore, "readwrite");
         transact.oncomplete = resolve;
 
         const addRequest = transact

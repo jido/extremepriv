@@ -38,7 +38,7 @@ function login(id) {
 }
 
 function createAccount(pii) {
-    const openDB = useDB(window.indexedDB.open(dbName, dbVer), true);
+    const openKeystore = useLocalDB(window.indexedDB.open(dbName, dbVer), true);
 
     return generateKey.then(key =>
         savePII(pii, key).then(secure_pii =>
@@ -49,8 +49,8 @@ function createAccount(pii) {
         ).then(id => {
             user_id = id;
 
-            return openDB.then(db =>
-                storeSecretKey(db, id, key)
+            return openKeystore.then(ks =>
+                storeSecretKey(ks, id, key)
             ).then(() => {
                 loadPageUpdate("identity", document.getElementById("main"));
             });
@@ -60,10 +60,10 @@ function createAccount(pii) {
 
 function loadPageUpdate(name, target) {
     //console.log("loadPageUpdate called on: " + target.innerHTML);
-    const openDB = useDB(window.indexedDB.open(dbName, dbVer));
+    const openKeystore = useLocalDB(window.indexedDB.open(dbName, dbVer));
 
-    const getPII = openDB.then(db =>
-        getSecretKey(db, user_id)
+    const getPII = openKeystore.then(ks =>
+        getSecretKey(ks, user_id)
     ).then(key =>
         decryptMessage(secure_pii, key)
     );
@@ -78,12 +78,12 @@ function loadPageUpdate(name, target) {
 }
 
 function downloadSecretKey() {
-    const openDB = useDB(window.indexedDB.open(dbName, dbVer));
+    const openKeystore = useLocalDB(window.indexedDB.open(dbName, dbVer));
 
     const fileOptions = { suggestedName: `${user_id}.secretkey` };
 
-    return openDB.then(db =>
-        keyAsText(getSecretKey(db, user_id))
+    return openKeystore.then(ks =>
+        keyAsText(getSecretKey(ks, user_id))
     ).then(data => {
         if (!!window.showSaveFilePicker) {
             return window.showSaveFilePicker(fileOptions).then(handle =>
@@ -107,7 +107,7 @@ function downloadSecretKey() {
 }
 
 function isUserWithKey(id) {
-    const openDB = useDB(window.indexedDB.open(dbName, dbVer));
+    const openKeystore = useLocalDB(window.indexedDB.open(dbName, dbVer));
 
     const updateState = function(found) {
         document.getElementById("upload-key").disabled = found;
@@ -127,8 +127,8 @@ function isUserWithKey(id) {
         return false;
     }
     else {
-        return openDB.then(db =>
-            containsSecretKey(db, id)
+        return openKeystore.then(ks =>
+            containsSecretKey(ks, id)
         ).then(updateState)
         .catch(() =>
             updateState(false)
@@ -137,10 +137,10 @@ function isUserWithKey(id) {
 }
 
 function init() {
-    const openDB = useDB(window.indexedDB.open(dbName, dbVer));
+    const openKeystore = useLocalDB(window.indexedDB.open(dbName, dbVer));
 
-    return openDB.then(db =>
-        lastAccountId(db)
+    return openKeystore.then(ks =>
+        lastAccountId(ks)
     ).then(id => {
         if (id != null) {
             document.getElementById('user-id').value = id;
@@ -151,12 +151,12 @@ function init() {
 }
 
 function uploadSecretKey(file) {
-    const openDB = useDB(window.indexedDB.open(dbName, dbVer), true);
+    const openKeystore = useLocalDB(window.indexedDB.open(dbName, dbVer), true);
 
     if (file) {
         return keyFromText(file.text()).then(key =>
-            openDB.then(db =>
-                storeSecretKey(db, user_id, key)
+            openKeystore.then(ks =>
+                storeSecretKey(ks, user_id, key)
             ).then(() => {
                 document.getElementById("key-status").innerHTML = "Saved";
             })
