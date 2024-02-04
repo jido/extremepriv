@@ -1,26 +1,26 @@
 :root {
-  /* gris
-  --color-light: #f1f1f1;
-  --color-dark: #555;
-  --color-hover: #ddd;
-  --color-active: #ccc;
-  */
-  
-  --color-lighter: #f4f1de;
-  --color-light: #f2cc8f;
-  --color-dark: #3d405b;
-  --color-hover: #81b29a;
-  --color-active: #e07a5f;
+  --main-bg-color: unset;
+  --text-color-lighter: initial;
+  --text-color-light: initial;
+  --text-color-dark: var(--color-light);
+  --text-color-hover: initial;
+  --text-color-active: initial;
+  --text-color-disabled: #888;
+
+  --color-disabled: #ddd;
   --color-border: #ccc;
+  --input-color: unset;
 }
 
 body {
   font-family: Calibri, 'Trebuchet MS', sans-serif;
+  background-color: var(--main-bg-color);
 }
 
 .bloc {
   border: 1px solid var(--color-border);
   background-color: var(--color-lighter);
+  color: var(--text-color-lighter);
 }
 
 /* Style the tab */
@@ -28,6 +28,7 @@ body {
   overflow: hidden;
   border: 1px solid var(--color-border);
   background-color: var(--color-light);
+  color: var(--text-color-light);
   padding: .5rem;
 }
 
@@ -46,6 +47,7 @@ body {
 /* Change active tab button background color */
 .tab button.active {
   background-color: var(--color-active);
+  color: var(--text-color-active);
 }
 
 .tab-content {
@@ -54,9 +56,10 @@ body {
 
 .tab-content > button {
   width: fit-content;
+  margin: auto;
   padding: 0.5rem 1.5rem;
   background-color: var(--color-light);
-  margin: auto;
+  color: var(--text-color-light);
 }
 
 label[for] {
@@ -64,9 +67,9 @@ label[for] {
 }
 
 label[for].disabled {
-  background-color: #ddd;
+  background-color: var(--color-disabled);
+  color: var(--text-color-disabled);
   opacity: 0.7;
-  color: #888;
 }
 
 label[for] > input[type="file"] {
@@ -97,11 +100,12 @@ a, div[onclick] {
 
 button, a {
   background-color: var(--color-light);
+  color: var(--text-color-light);
 }
 
 button.color-inverse, a.color-inverse, div[onclick] {
   background-color: var(--color-dark);
-  color: var(--color-light);
+  color: var(--text-color-dark);
 }
 
 a:hover, button:hover, div[onclick]:hover {
@@ -110,20 +114,27 @@ a:hover, button:hover, div[onclick]:hover {
 
 button:hover {
   background-color: var(--color-hover);
+  color: var(--text-color-hover);
 }
 
 label[for]:not(.disabled):hover {
   background-color: var(--color-light);
+  color: var(--text-color-light);
 }
 
 a:hover, div[onclick]:hover {
   background-color: var(--color-hover);
-  color: unset;
+  color: var(--text-color-hover);;
 }
 
 a {
   text-decoration: none;
   color: inherit;
+}
+
+input, select {
+  background-color: var(--input-color);
+  border: 1px solid var(--color-border);
 }
 
 /* hide */

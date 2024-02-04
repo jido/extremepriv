@@ -1,0 +1,12 @@
+:root {
+    --color-lighter: #bfdfc7;
+    --color-light: #5dd39e;
+    --color-dark: #513b56;
+    --color-hover: #525174;
+    --color-active: #348aa7;
+    --color-disabled: #a5a5a5;
+
+    --text-color-hover: white;
+    --text-color-active: white;
+    --text-color-disabled: #ccc;
+  }

@@ -1,0 +1,9 @@
+:root {
+    /* gris */
+    --color-lighter: #bbb;
+    --color-light: #ccc;
+    --color-dark: #555;
+    --color-hover: #ddd;
+    --color-active: #aaa;
+    --color-border: #ddd;
+  }

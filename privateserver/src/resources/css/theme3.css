@@ -1,0 +1,18 @@
+:root {
+  --main-bg-color: black;
+
+  --color-lighter: #777076;;
+  --color-light: #597d7c;
+  --color-dark: #404556;
+  --color-hover: #386775;
+  --color-active: #20504e;
+  
+  --text-color-dark: var(--color-light);
+  --text-color-hover: #6aa;
+  --text-color-active: #8aa;
+  --text-color-light: #10403e;
+
+  --color-disabled: #666;
+  --input-color: #9d9d9d;
+  --color-border: #666;
+}
