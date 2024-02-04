@@ -111,10 +111,11 @@ function isUserWithKey(id) {
 
     const updateState = function(found) {
         document.getElementById("upload-key").disabled = found;
+        const uploadButton = document.getElementById("upload-key-label");
         if (found) {
-            document.getElementById("upload-key-label").classList.remove('disabled');
+            uploadButton.classList.add('disabled'); // Secret key found, it should not be uploaded
         } else {
-            document.getElementById("upload-key-label").classList.add("disabled");
+            uploadButton.classList.remove("disabled");
         }
         document.getElementById("key-status").innerHTML = ( found ? "Saved" : "Required for user ID " + id );
         user_id = id;
@@ -144,7 +145,6 @@ function init() {
         if (id != null) {
             document.getElementById('user-id').value = id;
             document.getElementById("key-status").innerHTML = "Saved";
-            document.getElementById("upload-key-label").classList.remove("disabled");
             user_id = id;
         }
     }).catch(() => null);

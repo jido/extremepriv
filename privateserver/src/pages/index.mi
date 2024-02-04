@@ -5,7 +5,7 @@
     <title>Extreme Privacy Demo</title>
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/specific.css">
-    <link rel="stylesheet" href="/css/theme4.css">
+    <link rel="stylesheet" href="/css/theme.css">
     <script type="text/javascript" src="/crypto.js"></script>
     <script type="text/javascript" src="/keystore.js"></script>
     <script type="text/javascript" src="/dynamic.js"></script>
