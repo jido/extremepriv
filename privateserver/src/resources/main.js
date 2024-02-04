@@ -141,7 +141,7 @@ function init() {
     return openDB.then(db =>
         lastAccountId(db)
     ).then(id => {
-        if (id !== null) {
+        if (id != null) {
             document.getElementById('user-id').value = id;
             document.getElementById("key-status").innerHTML = "Saved";
             document.getElementById("upload-key-label").classList.remove("disabled");
