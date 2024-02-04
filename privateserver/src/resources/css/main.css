@@ -176,6 +176,10 @@ a {
   gap: .5rem;
 }
 
+[class*="grid-"][class*="col-"] > * {
+  width: auto;
+}
+
 /* width depends on content */
 .fit-content {
   width: fit-content;
