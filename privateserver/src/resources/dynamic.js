@@ -29,16 +29,18 @@ function getTemplate(name) {
 }
 
 function getHtml(template, info) {
+    if (info.dob) {
+        // The following is for demo purposes...
+        const birthDate = new Date(info.dob);
+        info.dob = {
+            asDate: birthDate.toLocaleDateString(),
+            isThisMonth: new Date().getMonth() === birthDate.getMonth()
+        };
+    }
     return mistigri.prrcess(
         template,
-        {
-            ...info,
-            // The following is for demo purposes...
-            today: new Date(),
-            getDate: o => new Date(o.from),
-            isSameMonth: o => (o.a.getMonth() === o.b.getMonth())
-        },
-        { methodCall: true, placeholder: "<unknown>" }
+        info,
+        { placeholder: "<unknown>" }
     );
 }
 

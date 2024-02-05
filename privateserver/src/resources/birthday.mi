@@ -1,13 +1,13 @@
 You were born on
-{{#getDate from=dob}}{{$item.toLocaleDateString}}.
+{{#dob}}{{asDate}}.
 
-{{#isSameMonth a = today b = $item}}
+{{#isThisMonth}}
 <p>
   Congratulations, it was this month! Happy birthday 🎂🎉
 </p>
-{{/isSameMonth}}
+{{/isThisMonth}}
 
-{{/getDate}}
+{{/dob}}
 <p>
     <a href="https://github.com/jido/extremepriv">Project Homepage</a>
 </p>
