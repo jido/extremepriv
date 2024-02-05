@@ -36,7 +36,7 @@ The user can leave the page and come back later to see their name in the placeho
 
 The cipher key can be *copied to another device or app* to access the same information there.
 
-A future version of the page will demonstrate a page update which shows content supposed to be of interest to the user based on their sex. Because it loads different images depending on personal information, this is done server-side. *Only strictly relevant information is sent* and the server discards it as soon as it finishes preparing the appropriate images.
+A future version of the page will demonstrate a page update which shows content supposed to be of interest to the user based on their gender. Because it loads different images depending on personal information, this is done server-side. *Only strictly relevant information is sent* and the server discards it as soon as it finishes preparing the appropriate images.
 
 The future page will also receive a *push notification* suggesting the user to check their inbox.
 
