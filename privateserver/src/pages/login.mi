@@ -1,8 +1,8 @@
 <div class="tab-wrapper bloc">
     
     <div class="tab grid-2-col-same">
-        <button class="tab-link active" onclick="showTab(event, 'new-account')">Create account</button>
-        <button class="tab-link" onclick="showTab(event, 'login')">Login</button>
+        <button class="tab-link active" id="new-acct-button" onclick="showTab(event, 'new-account')">Create account</button>
+        <button class="tab-link" id="login-button" onclick="showTab(event, 'login')">Login</button>
     </div>
 
     <form id="new-account" class="tab-content login-tab grid-3-col-auto" onsubmit="return false" title="The information will be local to your device. An encrypted copy is saved on the webserver but it cannot be read there">

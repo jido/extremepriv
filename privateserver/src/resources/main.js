@@ -143,8 +143,9 @@ function init() {
         lastAccountId(ks)
     ).then(id => {
         if (id != null) {
-            document.getElementById('user-id').value = id;
+            document.getElementById("user-id").value = id;
             document.getElementById("key-status").innerHTML = "Saved";
+            document.getElementById("login-button").click();
             user_id = id;
         }
     }).catch(() => null);
