@@ -1,13 +1,15 @@
-You were born on
-{{#dob}}{{asDate}}.
+<div class="center" title="All personal info is inserted by the browser after loading a page template from the server">
+    You were born on
+    {{#dob}}{{asDate}}.
 
-{{#isThisMonth}}
-<p>
-  Congratulations, it was this month! Happy birthday 🎂🎉
-</p>
-{{/isThisMonth}}
+    {{#isThisMonth}}
+    <p>
+      Congratulations, it was this month! Happy birthday 🎂🎉
+    </p>
+    {{/isThisMonth}}
 
-{{/dob}}
+    {{/dob}}
+</div>
 <p>
     <a href="https://github.com/jido/extremepriv">Project Homepage</a>
 </p>

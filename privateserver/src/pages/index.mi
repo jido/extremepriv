@@ -14,10 +14,10 @@
   </head>
   <body onload="init()">
     {{>header}}
-    <div class="fit-content flex-column" style="align-items: center; margin: 2rem auto;">
+    <main class="fit-content flex-column">
       <div class="flex-line flex-max" id="main">
         {{>login}}
       </div>
-    </div>
+    </main>
   </body>
 </html>
