@@ -13,6 +13,7 @@
     <script type="text/javascript" src="/main.js"></script>
   </head>
   <body onload="init()">
+    {{>header}}
     <div class="fit-content flex-column" style="align-items: center; margin: 2rem auto;">
       <div class="flex-line flex-max" id="main">
         {{>login}}

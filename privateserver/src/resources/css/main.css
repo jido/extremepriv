@@ -6,6 +6,8 @@
   --text-color-hover: initial;
   --text-color-active: initial;
   --text-color-disabled: #888;
+  --text-color-bg-contrast: unset;
+  --text-color-bg-highlight: unset;
 
   --color-disabled: #ddd;
   --color-border: #ccc;
@@ -15,6 +17,17 @@
 body {
   font-family: Calibri, 'Trebuchet MS', sans-serif;
   background-color: var(--main-bg-color);
+}
+
+h1 {
+  margin: 0 0 0 2rem;
+  line-height: 5.5rem;
+  color: var(--text-color-bg-contrast);
+  font-size: 7rem;
+}
+
+.highlight {
+    color: var(--text-color-bg-highlight);
 }
 
 .bloc {
@@ -51,7 +64,7 @@ body {
 }
 
 .tab-content {
-  font-size: 1.1rem;
+  font-size: x-large;
 }
 
 .tab-content > button {
@@ -82,7 +95,7 @@ button {
   padding: 1rem;
   cursor: pointer;
   transition: 0.3s;
-  font-size: 1.1rem;
+  font-size: x-large;
 }
 
 label[for], a, div[onclick] {
@@ -135,6 +148,7 @@ a {
 input, select {
   background-color: var(--input-color);
   border: 1px solid var(--color-border);
+  font-size: x-large;
 }
 
 /* hide */
