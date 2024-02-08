@@ -2,7 +2,12 @@
     /* gris */
     --color-lighter: #ecf8f8;
     --color-light: #eee4e1;
-    --color-dark: #b2967d;
+    --color-dark: #947d68;
     --color-hover: #e7d8c9;
     --color-active: #e6beae;
+    --main-bg-color: #002866;
+
+    --text-color-hover: #eff;
+    --text-color-bg: var(--color-hover);
+    --text-color-bg-highlight: #e1a288;
   }

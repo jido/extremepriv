@@ -1,13 +1,13 @@
 :root {
-  --main-bg-color: unset;
+  --main-bg-color: black;
   --text-color-lighter: var(--color-dark);
   --text-color-light: var(--color-dark);
   --text-color-dark: var(--color-light);
   --text-color-hover: initial;
   --text-color-active: initial;
   --text-color-disabled: #888;
-  --text-color-bg: unset;
-  --text-color-bg-highlight: unset;
+  --text-color-bg: var(--color-light);
+  --text-color-bg-highlight: white;
 
   --color-disabled: #ddd;
   --color-border: #ccc;

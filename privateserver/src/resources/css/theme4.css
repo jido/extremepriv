@@ -1,5 +1,5 @@
 :root {
-  --main-bg-color: black;
+  --main-bg-color: #ddc;
   
   --color-lighter: #455561;;
   --color-light: #5a464c;
@@ -11,8 +11,9 @@
   --text-color-hover: #bba9af;
   --text-color-active: #b1b1b1;
   --text-color-light: #808183;
+  --text-color-lighter: #261931;
 
   --color-disabled: #555;
-  --input-color: #9d9d9d;
+  --input-color: #aca9a9;
   --color-border: #666;
 }

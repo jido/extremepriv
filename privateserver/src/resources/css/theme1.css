@@ -4,9 +4,13 @@
     --color-dark: #513b56;
     --color-hover: #525174;
     --color-active: #348aa7;
-    --color-disabled: #a5a5a5;
+    --color-disabled: #75a0a5;
+    --color-border: var(--color-disabled);
+    --main-bg-color: #fff3ea;
 
     --text-color-hover: white;
     --text-color-active: white;
-    --text-color-disabled: #ccc;
+    --text-color-disabled: #9ba;
+    --text-color-bg: var(--color-active);
+    --text-color-bg-highlight: #9ec;
   }
