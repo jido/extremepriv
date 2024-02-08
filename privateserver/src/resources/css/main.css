@@ -1,12 +1,12 @@
 :root {
   --main-bg-color: unset;
-  --text-color-lighter: initial;
+  --text-color-lighter: var(--color-dark);
   --text-color-light: var(--color-dark);
   --text-color-dark: var(--color-light);
   --text-color-hover: initial;
   --text-color-active: initial;
   --text-color-disabled: #888;
-  --text-color-bg-contrast: unset;
+  --text-color-bg: unset;
   --text-color-bg-highlight: unset;
 
   --color-disabled: #ddd;
@@ -22,7 +22,7 @@ body {
 h1 {
   margin: 0 0 0 2rem;
   line-height: 5.5rem;
-  color: var(--text-color-bg-contrast);
+  color: var(--text-color-bg);
   font-size: 7rem;
 }
 
