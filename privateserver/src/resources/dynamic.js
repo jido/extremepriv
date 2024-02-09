@@ -64,3 +64,8 @@ function formJson(form) {
     }
     return result;
 }
+
+function setTheme(theme) {
+    console.log("Selected " + theme);
+    return window.fetch("customize/" + theme);
+}

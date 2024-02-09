@@ -1,3 +1,14 @@
+<div>
+<label for="customize-theme">theme</label>
+<select id="customize-theme" onchange="setTheme(value)">
+    <option value="theme" {{!>}}{{#theme}}selected{{/theme}}>Cheerful (default)</option>
+    <option value="theme1" {{!>}}{{#theme1}}selected{{/theme1}}>Fresh</option>
+    <option value="theme2" {{!>}}{{#theme2}}selected{{/theme2}}>Eggshell</option>
+    <option value="theme3" {{!>}}{{#theme3}}selected{{/theme3}}>Back pond</option>
+    <option value="theme4" {{!>}}{{#theme4}}selected{{/theme4}}>Library</option>
+    <option value="theme-gris" {{!>}}{{#theme-gris}}selected{{/theme-gris}}>Black & White</option>
+</select>
+</div>
 <p>
     You are <span title="Your name is just a placeholder on the server, which is filled in locally">{{firstName}}.</span>
 </p>

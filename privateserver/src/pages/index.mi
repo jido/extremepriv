@@ -12,7 +12,7 @@
     <script type="text/javascript" src="/mistigri.js"></script>
     <script type="text/javascript" src="/main.js"></script>
   </head>
-  <body onload="init()">
+  <body onload="init('{{theme}}')">
     {{>header}}
     <main class="fit-content flex-column">
       <div class="flex-line flex-max" id="main">

@@ -2,6 +2,7 @@
 
 var user_id = null;
 var secure_pii = null;
+var selected_theme = null;
 
 function savePII(pii, key) {
     const message = JSON.stringify(pii);
@@ -67,10 +68,13 @@ function loadPageUpdate(name, target) {
     ).then(key =>
         decryptMessage(secure_pii, key)
     );
+    
+    const model = { id: user_id };
+    model[selected_theme] = true;
 
     return getTemplate(name).then(template =>
         getPII.then(pii =>
-            getHtml(template, {...JSON.parse(pii), id: user_id})
+            getHtml(template, { ...JSON.parse(pii), ...model })
         )
     ).then(html => {
         target.outerHTML = html;
@@ -136,8 +140,11 @@ function isUserWithKey(id) {
     }
 }
 
-function init() {
+function init(theme) {
     const openKeystore = useLocalDB(window.indexedDB.open(dbName, dbVer));
+    if (theme) {
+        selected_theme = theme;
+    }
 
     return openKeystore.then(ks =>
         lastAccountId(ks)
