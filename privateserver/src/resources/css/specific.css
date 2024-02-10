@@ -15,3 +15,14 @@ main {
   grid-row: 1 / 6;
   grid-column: 3;
 }
+
+.options {
+    background-color: var(--color-lighter);
+    color: var(--text-color-lighter);
+    padding: 0.5rem 1rem;
+    border: 3px solid;
+}
+
+.options > label {
+    background-color: var(--color-light);
+}

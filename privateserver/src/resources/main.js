@@ -69,12 +69,17 @@ function loadPageUpdate(name, target) {
         decryptMessage(secure_pii, key)
     );
     
-    const model = { id: user_id };
-    model[selected_theme] = true;
-
+    const customized = {};
+    if (selected_theme) {
+        customized[selected_theme] = true;
+    }
     return getTemplate(name).then(template =>
         getPII.then(pii =>
-            getHtml(template, { ...JSON.parse(pii), ...model })
+            getHtml(template, {
+                ...JSON.parse(pii),
+                id: user_id,
+                customTheme: customized
+            })
         )
     ).then(html => {
         target.outerHTML = html;
