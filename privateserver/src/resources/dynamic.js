@@ -14,13 +14,17 @@ function getPII(id) {
     });
 }
 
-function getTemplate(name) {
+function sanitizeResource(name) {
     // Sanitise name
-    const template = name
+    return name
         .replaceAll(".", "")
         .replaceAll(":", "");
+}
 
-    return window.fetch(template + ".mi").then(res => {
+function getTemplate(name) {
+    const template = sanitizeResource(name) + ".mi";
+
+    return window.fetch(template).then(res => {
         if (!res.ok) {
             throw new Error(`Status: HTTP ${res.status} ${res.statusText} - Unable to load update.`);
         }
@@ -65,7 +69,9 @@ function formJson(form) {
     return result;
 }
 
-function setTheme(theme) {
-    console.log("Selected " + theme);
-    return window.fetch("customize/" + theme);
+function setTheme(name) {
+    const theme = "/css/" + sanitizeResource(name) + ".css";
+
+    document.getElementById("theme").href = theme;
+    return window.fetch("customize/" + name);
 }
