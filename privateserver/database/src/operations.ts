@@ -3,7 +3,7 @@ import { Account, SecurePII } from "./entity/Account"
 
 AppDataSource.initialize();
 
-export async function createAccount(privateInfo: SecurePII) {
+export async function createAccount(privateInfo: SecurePII): Promise<number> {
     try {
         console.log("Inserting a new account into the database...");
         const acc = new Account();
@@ -22,10 +22,27 @@ export async function getSecurePII(id: number) {
         console.log("Getting encrypted PII for id " + id);
         const row = await AppDataSource.getRepository(Account).findOneBy({ id: id });
         if (row) {
-            return row.privateinfo;
+            return { ...row.privateinfo, theme: row.theme };
         }
     }
     catch(error) {
         console.log(error);
     }
+}
+
+export async function updateTheme(theme: string, id: number): Promise<string> {
+    try {
+        console.log("Setting a theme for id " + id);
+        const accounts = AppDataSource.getRepository(Account);
+        const row = await accounts.findOneBy({ id: id });
+        if (row) {
+            row.theme = theme;
+            await accounts.update(id, row);
+            return '"ok"';
+        }
+    }
+    catch(error) {
+        console.log(error);
+    }
+    return '"error"'
 }

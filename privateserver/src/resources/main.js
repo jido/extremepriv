@@ -34,6 +34,10 @@ function login(id) {
     return getPII(id).then(pii => {
         user_id = id;
         secure_pii = pii;
+        if (pii.theme) {
+            selected_theme = pii.theme;
+            loadTheme(selected_theme);
+        }
         loadPageUpdate("identity", document.getElementById("main"));
     });
 }

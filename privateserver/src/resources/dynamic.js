@@ -8,7 +8,8 @@ function getPII(id) {
         return res.json().then(payload =>
             ({
                 iv: bytesFromBase64(payload.iv),
-                ciphertext: bytesFromBase64(payload.ciphertext)
+                ciphertext: bytesFromBase64(payload.ciphertext),
+                theme: payload.theme
             })
         );
     });
@@ -69,9 +70,12 @@ function formJson(form) {
     return result;
 }
 
-function setTheme(name) {
+function loadTheme(name) {
     const theme = "/css/" + sanitizeResource(name) + ".css";
-
     document.getElementById("theme").href = theme;
-    return window.fetch("customize/" + name);
+}
+
+function setTheme(theme) {
+    loadTheme(theme);
+    return window.fetch("customize/" + theme);
 }
