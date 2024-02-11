@@ -1,7 +1,7 @@
 <p>
     You are <span title="Your name is just a placeholder on the server, which is filled in locally">{{firstName}}.</span>
 </p>
-<div onclick="loadPageUpdate('birthday', this)">
+<div onclick="loadPageUpdate('birthday', this)" aria-live="polite">
     Click here to continue
 </div>
 
