@@ -20,5 +20,5 @@
 {{/customTheme}}
 <div class="grid-2-col-same w-100">
     <a href="javascript:downloadSecretKey()" title="The secret key is needed to load the account later. Click if you want to login with a different browser">Download secret key</a>
-    <a href="/" title="Return to the login page">Log out</a>
+    <a href="/logout" title="Return to the login page">Log out</a>
 </div>

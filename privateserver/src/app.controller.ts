@@ -9,23 +9,35 @@ export class AppController {
 
     @Get()
     @Render('index')
-    async root(@Req() request: Request, @Session() session: Record<string, any>) {
-        //await promisify(session.destroy)();
+    root(@Req() request: Request) {
+        return { theme: request.cookies.theme };
+    }
+
+    @Get('logout')
+    @Render('index')
+    logout(@Req() request: Request, @Session() session: Record<string, any>) {
+        session.destroy(e => {
+            if (e) {console.log(e)}
+        });
         return { theme: request.cookies.theme };
     }
     
     @Get('secrets/:id')
-    async secrets(@Param('id') id: number, @Session() session: Record<string, any>) {
-        //const sid = await promisify(session.regenerate)();
-        session.user = id;
+    async secrets(@Param('id') id: number, @Req() req: Request) {
+        await new Promise(next =>
+            req.session.regenerate(next)
+        );
+        req.session.user = id;
         return getSecurePII(id);
     }
     
     @Post('create')
-    async create(@Body() privateInfo: SecurePII, @Session() session: Record<string, any>) {
-        //const sid = await promisify(session.regenerate)();
-        session.user = createAccount(privateInfo);
-        return session.user;
+    async create(@Body() privateInfo: SecurePII, @Req() req: Request) {
+        await new Promise(next =>
+            req.session.regenerate(next)
+        );
+        req.session.user = await createAccount(privateInfo);
+        return req.session.user;
     }
     
     @Get('customize/:theme')
