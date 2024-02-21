@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <title>Extreme Privacy Demo</title>
+    <link rel="shortcut icon" href="/img/favicon.ico">
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/specific.css">
     <link rel="stylesheet" href="/css/{{theme default='theme'}}.css" id="theme">
